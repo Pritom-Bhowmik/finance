@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Investment;
 use App\Models\Loan;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Termwind\Components\Raw;
@@ -109,7 +110,37 @@ class AdminController extends Controller
 
     public function cashiers(){
         $cashiers = User::where('type', 3)->get();
-        return view('admin.cashier.index', compact('cashiers'));
+        $institutions = User::where('type', 3)->get();
+        return view('admin.cashier.index', compact('cashiers','institutions'));
+    }
+
+    // Report Search
+    public function search(Request $request){
+
+            
+
+        if($fromdate = $request->from && $todate = $request->from){
+            $fromdate = $request->from??date('Y-m-d');
+            $todate = $request->to??date('Y-m-d');
+            $type = 3;
+            $cashiers = DB::table('users')->select()
+            ->whereBetween('created_at', [date('Y-m-d', strtotime($fromdate)).' 00:00:00', date('Y-m-d', strtotime($todate)).' 00:00:00'])
+            ->where('type', $type)
+            ->get();
+        }elseif($institution = $request->institution){
+            $institution = $request->institution;
+            $type = 3;
+            $cashiers = DB::table('users')->select()
+            ->where('first_name', $institution)
+            ->where('type', $type)
+            ->get();
+        }else{
+            return "OK";
+        }
+
+       
+        $institutions = User::where('type', 2)->get();
+        return view('admin.cashier.index', compact('cashiers','institutions'));
     }
     
     public function create_cashier(){

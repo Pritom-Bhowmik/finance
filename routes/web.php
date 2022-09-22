@@ -87,13 +87,17 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
     Route::post('/admin/cashier/update', [AdminController::class, 'cashier_update'])->name('admin.cashier.update');
     Route::get('/admin/cashier/delete/{id}', [AdminController::class, 'delete_cashier']);
 
+    // Report Search
+    // search_date_of_birth
+    Route::post('/admin/cashiers', [AdminController::class, 'search']);
+
     Route::get('/admin/loan-requests', [AdminController::class, 'loan_requests']);
     Route::get('admin/loan-requests/status/approve/{id}', [AdminController::class, 'loan_request_approve']);
     Route::get('admin/loan-requests/status/reject/{id}', [AdminController::class, 'loan_request_reject']);
 
     Route::get('admin/loans', [AdminController::class, 'loans']);
 
-    Route::get('/admin/cashiers', [AdminController::class, 'cashiers']);
+    // Route::get('/admin/cashiers', [AdminController::class, 'cashiers']);
 });
   
 /*------------------------------------------
